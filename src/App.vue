@@ -17,6 +17,7 @@ useCopyCode()
 </script>
 
 <template>
+  <!-- 全局化配置设置内部组件的主题、语言和组件卸载于其他位置的 DOM 的类名。 -->
   <NConfigProvider
     class="h-full"
     :locale="zhCN"

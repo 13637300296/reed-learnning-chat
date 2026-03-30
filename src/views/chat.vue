@@ -181,7 +181,7 @@ const handleResetState = () => {
 }
 handleResetState()
 
-
+// 提示标签
 const PromptTag = defineComponent({
   props: {
     text: {
@@ -243,11 +243,13 @@ const promptTextList = ref([
   <LayoutCenterPanel
     :loading="loading"
   >
+    <!-- 默认插槽内容（不写 #default 也成立） -->
     <!-- 内容区域 -->
     <div
       flex="~ col"
       h-full
     >
+    <!-- 顶部名称 模型选择 -->
       <div
         flex="~ justify-between items-center"
       >
@@ -268,6 +270,7 @@ const promptTextList = ref([
                   :disabled="stylizingLoading"
                   :options="modelListSelections"
                 />
+                <!-- 注意ICON -->
                 <CustomTooltip
                   :disabled="false"
                 >
@@ -295,7 +298,7 @@ const promptTextList = ref([
           </template>
         </NavigationNavBar>
       </div>
-
+      <!-- 渲染区域 -->
       <div
         flex="1 ~ col"
         min-h-0
@@ -310,7 +313,7 @@ const promptTextList = ref([
           @completed="onCompletedReader"
         />
       </div>
-
+      <!-- 输入区域 -->
       <div
         flex="~ col items-center"
         flex-basis="10%"

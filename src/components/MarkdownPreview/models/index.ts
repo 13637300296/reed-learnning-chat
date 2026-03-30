@@ -180,9 +180,9 @@ interface TypesModelLLM {
   // 模型标识符
   modelName: string
   // Stream 结果转换器
-  transformStreamValue: TransformFunction
+  transformStreamValue: TransformFunction //怎么解析这个模型返回的流
   // 每个大模型调用的 API 请求
-  chatFetch: (text: string) => Promise<Response>
+  chatFetch: (text: string) => Promise<Response> //怎么请求
 }
 
 

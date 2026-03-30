@@ -9,7 +9,7 @@ withDefaults(
   }
 )
 </script>
-
+<!-- chat 页面中下部内容 -->
 <template>
   <LayoutSlotFrame
     :class="[
@@ -23,6 +23,7 @@ withDefaults(
         overflow-hidden
         class="panel-shadow"
       >
+      <!-- loding -->
         <n-spin
           w-full
           h-full
@@ -37,6 +38,7 @@ withDefaults(
           <template #icon>
             <div class="i-svg-spinners:pulse-3"></div>
           </template>
+          <!-- 左固定 -->
           <section
             v-if="$slots.left"
             flex="~ col"
@@ -46,6 +48,7 @@ withDefaults(
           >
             <slot name="left"></slot>
           </section>
+          <!-- 右占满 -->
           <section
             flex="1"
             h-full

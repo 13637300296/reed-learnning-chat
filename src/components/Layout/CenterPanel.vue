@@ -3,6 +3,7 @@
 
 <template>
   <LayoutSlotCenterPanel v-bind="$attrs">
+    <!-- 预留左侧侧菜单栏  如果传入了sidebar 才会渲染左栏-->
     <template
       v-if="$slots.sidebar"
       #left
@@ -22,6 +23,7 @@
         >
           <slot name="sidebar-header"></slot>
         </div>
+       
         <div
           flex="1"
           p="20px"
@@ -37,6 +39,7 @@
         </div>
       </div>
     </template>
+     <!-- 右侧主内容区 -->
     <div
       h-full
       bg="#fefbff"
