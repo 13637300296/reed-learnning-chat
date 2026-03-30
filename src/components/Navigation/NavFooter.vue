@@ -12,7 +12,7 @@ withDefaults(
 const link = ref('https://github.com/pdsuwwz')
 
 </script>
-
+<!-- 底部 作者信息栏 -->
 <template>
   <footer
     class="footer"

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>船舶状态卡片</title>
+    <style>
+        :root {
+            --text-main: #1a2a4e;
+            --text-sub: #4a5d8a;
+            --border-color: #e2e8f0;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 渐变背景 */
+            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* 卡片容器 */
+        .card {
+            width: 450px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px); /* 毛玻璃效果 */
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* 网格布局：2列 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            row-gap: 0;
+        }
+
+        /* 单元格样式 */
+        .grid-item {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        /* 最后两项去掉底边线 */
+        .grid-item:nth-last-child(1),
+        .grid-item:nth-last-child(2) {
+            border-bottom: none;
+        }
+
+        /* 标签文字 (MMSI, 经度等) */
+        .label {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        /* 数值文字 */
+        .value {
+            font-size: 18px;
+            color: #334155;
+            font-family: "Consolas", monospace; /* 数字建议用等宽字体 */
+        }
+
+        /* 图标占位 (简化版) */
+        .icon {
+            position: absolute;
+            right: 10px;
+            top: 15px;
+            width: 20px;
+            height: 20px;
+            opacity: 0.4;
+            border: 1.5px solid var(--text-sub);
+            border-radius: 4px;
+        }
+
+        .icon-circle { border-radius: 50%; }
+
+        /* 页脚水印 */
+        .footer {
+            text-align: right;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="grid-container">
+        <!-- 第一行 -->
+        <div class="grid-item">
+            <span class="label">MMSI:</span>
+            <div class="value">657170800</div>
+        </div>
+        <div class="grid-item">
+            <span class="label">拍摄卫星:</span>
+            <div class="value">HS02</div>
+            <div class="icon icon-circle"></div>
+        </div>
+
+        <!-- 第二行 -->
+        <div class="grid-item">
+            <span class="label">经度:</span>
+            <div class="value">8.18684</div>
+        </div>
+        <div class="grid-item">
+            <span class="label">纬度:</span>
+            <div class="value">4.16805</div>
+            <div class="icon"></div>
+        </div>
+
+        <!-- 第三行 -->
+        <div class="grid-item">
+            <span class="label">航速:</span>
+            <div class="value">6.9</div>
+        </div>
+        <div class="grid-item">
+            <span class="label">航向:</span>
+            <div class="value">340.4</div>
+            <div class="icon"></div>
+        </div>
+
+        <!-- 第四行 -->
+        <div class="grid-item">
+            <span class="label">航行状态:</span>
+            <div class="value">在航（机动船）</div>
+        </div>
+        <div class="grid-item">
+            <span class="label">时间:</span>
+            <div class="value">2025/11/23 1:21:15</div>
+            <div class="icon"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

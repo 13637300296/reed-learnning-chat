@@ -51,10 +51,10 @@ export default defineConfig(({ mode }) => {
       }
     },
     plugins: [
-      UnoCSS(),
+      UnoCSS(),//高性能的原子化 CSS 引擎,替代 TailwindCSS
       vue(),
       raw({
-        fileRegex: /\.md$/
+        fileRegex: /\.md$/ //将匹配 .md 后缀的文件当作原始字符串导入（不经过编译）
       }),
       vueJsx(),
       AutoImport({
@@ -63,9 +63,11 @@ export default defineConfig(({ mode }) => {
           /\.vue\??/
         ],
         imports: [
-          'vue',
-          'vue-router',
-          '@vueuse/core',
+          // 值导入（运行时可用）
+          'vue',  // 自动导入 ref, reactive, computed 等
+          'vue-router', // 自动导入 useRouter, useRoute
+          '@vueuse/core',// 自动导入 useMouse, useStorage 等
+          //  类型导入（仅 TypeScript 类型检查）
           {
             'vue': [
               'createVNode',
@@ -88,6 +90,7 @@ export default defineConfig(({ mode }) => {
               'useLoadingBar'
             ]
           },
+          //  类型导入（仅 TypeScript 类型检查）
           {
             from: 'vue',
             imports: [
@@ -98,7 +101,7 @@ export default defineConfig(({ mode }) => {
               'SetupContext',
               'PropType'
             ],
-            type: true
+            type: true // ← 关键！只用于类型，不打包到 JS
           },
           {
             from: 'vue-router',
@@ -109,24 +112,30 @@ export default defineConfig(({ mode }) => {
             type: true
           }
         ],
+        // 按需自动解析 Naive UI 组件（生产环境启用，开发环境可能为了 HMR 稳定性关闭）。
+        // 结合后面的 Components 插件，实现 “用到才引入”，减小包体积。
         resolvers:
           mode === 'development'
             ? []
             : [NaiveUiResolver()],
+        // 自动扫描这些目录下的函数，也支持自动导入。
         dirs: [
           './src/hooks',
           './src/store/business',
           './src/store/transform'
         ],
+        //自动生成 TypeScript 声明文件，让 IDE 能智能提示自动导入的函数。
         dts: './auto-imports.d.ts',
+        // 自动生成 ESLint 规则，防止你重复手动 import（会报错）
         eslintrc: {
           enabled: true
         },
+        //允许在 Vue 模板中直接使用自动导入的函数
         vueTemplate: true
       }),
       Components({
-        directoryAsNamespace: true,
-        collapseSamePrefixes: true,
+        directoryAsNamespace: true, // 目录名作为命名空间（如 components/layout/Header.vue → LayoutHeader）
+        collapseSamePrefixes: true, // 合并相同前缀（如 IconUser, IconSetting → Icon.User, Icon.Setting）
         resolvers: [
           IconsResolver({
             prefix: 'auto-icon'
@@ -136,7 +145,7 @@ export default defineConfig(({ mode }) => {
       }),
       // Auto use Iconify icon
       Icons({
-        autoInstall: true,
+        autoInstall: true, // 自动安装缺失的图标集（如 @iconify/json）
         compiler: 'vue3',
         scale: 1.2,
         defaultStyle: '',
@@ -153,6 +162,7 @@ export default defineConfig(({ mode }) => {
         }
       ]
     },
+    //将环境变量注入代码，在运行时可通过 process.env.VITE_ROUTER_MODE 访问（Vite 特有，非 Node.js 的 process）
     define: {
       'process.env.VITE_ROUTER_MODE': JSON.stringify(env.VITE_ROUTER_MODE)
     },
@@ -160,6 +170,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           api: 'modern-compiler',
+          //全局注入 SCSS 变量，所有 .scss 文件都能直接使用  $ primary-color 等变量，无需 @import。
           additionalData: `@use '@/styles/naive-variables.scss' as *;`
         }
       }
