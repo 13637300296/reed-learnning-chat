@@ -42,6 +42,7 @@ defineExpose({
       }"
     ></slot>
   </template>
+  <!-- 内置的复制图标按钮。 -->
   <div
     v-else
     class="size-20"

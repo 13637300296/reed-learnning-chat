@@ -346,6 +346,7 @@ const emptyPlaceholder = computed(() => {
     }"
   >
     <transition name="fade">
+      <!-- 复制按钮 -->
       <n-float-button
         v-if="showCopy"
         position="absolute"
@@ -363,6 +364,7 @@ const emptyPlaceholder = computed(() => {
         />
       </n-float-button>
     </transition>
+    <!-- loading 加载icon -->
     <template #icon>
       <div class="i-svg-spinners:3-dots-rotate"></div>
     </template>
@@ -384,9 +386,11 @@ const emptyPlaceholder = computed(() => {
           !displayText && 'flex items-center justify-center'
         ]"
       >
+      <!-- 队列等待态 -->
         <WaitTextRender
           v-if="waitingForQueue && !displayText"
         />
+        <!-- 为空展示 -->
         <template v-else>
           <n-empty
             v-if="!displayText"
@@ -404,6 +408,7 @@ const emptyPlaceholder = computed(() => {
               </n-icon>
             </template>
           </n-empty>
+          <!-- 显示 markdown 渲染结果  -->
           <div
             v-else
             ref="refWrapperContent"
@@ -415,6 +420,7 @@ const emptyPlaceholder = computed(() => {
               class="markdown-wrapper"
               v-html="renderedContent"
             ></div>
+            <!-- 在底部按需显示“排队中”或“流式读取中”的小图标 -->
             <WaitTextRender
               v-if="waitingForQueue"
             />
