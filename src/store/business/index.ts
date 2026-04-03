@@ -25,7 +25,8 @@ export const useBusinessStore = defineStore('business-store', {
   },
   actions: {
     /**
-     * Event Stream 调用大模型接口
+     * Event Stream 调用大模型接口 
+     * 告诉子组件“这个模型的 chunk 怎么解”
      */
     async createAssistantWriterStylized(data): Promise<{error: number
       reader: ReadableStreamDefaultReader<string> | null}> {
@@ -38,10 +39,12 @@ export const useBusinessStore = defineStore('business-store', {
             reader: null
           }
         }
+        // store 根据当前模型拿到 chatFetch，发起请求
         this.currentModelItem.chatFetch(data.text)
           .then((res) => {
             if (res.body) {
-              const reader = res.body
+              // 响应流管道：
+              const reader = res.body //字节流
                 .pipeThrough(new TextDecoderStream())
                 .pipeThrough(TransformUtils.splitStream('\n'))
                 .getReader()

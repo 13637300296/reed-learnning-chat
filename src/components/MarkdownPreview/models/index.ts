@@ -25,6 +25,7 @@ export const createParser = () => {
 
     if (content.startsWith('data: ')) {
       keepAliveShown = false
+      // substring(start,stop) stop不包含
       const dataString = content.substring(6).trim()
       if (dataString === '[DONE]') {
         return {

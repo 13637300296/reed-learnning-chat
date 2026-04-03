@@ -10,7 +10,7 @@ const route = useRoute()
 const router = useRouter()
 const businessStore = useBusinessStore()
 
-
+// 选择器选项
 const modelListSelections = computed(() => {
   return modelMappingList.map<SelectBaseOption>((modelItem) => {
     let disabled = false
@@ -34,7 +34,7 @@ setTimeout(() => {
   loading.value = false
 }, 700)
 
-
+// 控制 生成是否进行中
 const stylizingLoading = ref(false)
 
 
@@ -42,13 +42,14 @@ const stylizingLoading = ref(false)
  * 输入字符串
  */
 const inputTextString = ref('')
+// 输入框ref
 const refInputTextString = ref<InputInst | null>()
 
 /**
  * 输出字符串 Reader 流（风格化的）
  */
 const outputTextReader = ref<ReadableStreamDefaultReader | null>()
-
+// Markdown ref
 const refReaderMarkdownPreview = ref<any>()
 
 const onFailedReader = () => {
@@ -65,6 +66,7 @@ const onFailedReader = () => {
   })
   triggerModelTermination()
 }
+// 恢复输入状态
 const onCompletedReader = () => {
   stylizingLoading.value = false
   setTimeout(() => {
@@ -76,7 +78,7 @@ const onCompletedReader = () => {
 }
 
 const handleCreateStylized = async () => {
-  // 若正在加载，则点击后恢复初始状态
+  // 若正在加载，则点击后恢复初始状态 中断生辰
   if (stylizingLoading.value) {
     refReaderMarkdownPreview.value.abortReader()
     onCompletedReader()
@@ -89,13 +91,14 @@ const handleCreateStylized = async () => {
     refInputTextString.value.focus()
     return
   }
-
+  // 清理旧状态并启动初始化 loading
   refReaderMarkdownPreview.value.resetStatus()
   refReaderMarkdownPreview.value.initializeStart()
 
   stylizingLoading.value = true
   const textContent = inputTextString.value
   inputTextString.value = ''
+  // 调用模接口获取数据
   const { error, reader } = await businessStore.createAssistantWriterStylized({
     text: textContent
   })
@@ -339,6 +342,7 @@ const promptTextList = ref([
           w-full
           px-1em
         >
+        <!-- input -->
           <n-input
             ref="refInputTextString"
             v-model:value="inputTextString"
@@ -354,6 +358,7 @@ const promptTextList = ref([
             }"
             :placeholder="placeholder"
           />
+          <!-- 发送按钮 -->
           <n-float-button
             position="absolute"
             :right="40"

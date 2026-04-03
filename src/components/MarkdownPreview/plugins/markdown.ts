@@ -111,7 +111,7 @@ const transformThinkMarkdown = (source: string): string => {
   return result
 }
 
-
+// 把 displayText 转 HTML
 export const renderMarkdownText = (content: string) => {
   const thinkTransformed = transformThinkMarkdown(content)
   const mathTransformed = transformMathMarkdown(thinkTransformed)
@@ -119,7 +119,7 @@ export const renderMarkdownText = (content: string) => {
   return md.render(mermaidTransformed)
 }
 
-// 触发 Mermaid 渲染
+// 触发 Mermaid 渲染 触发 Mermaid 图重绘
 export const renderMermaidProcess = (callback = () => {}) => {
   renderMermaidSSE(callback)
 }

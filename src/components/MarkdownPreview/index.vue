@@ -19,8 +19,8 @@ const props = withDefaults(
 
 
 // 定义响应式变量
-const displayText = ref('')
-const textBuffer = ref('')
+const displayText = ref('') // 写入页面内容
+const textBuffer = ref('') // 待展示缓存
 const readerLoading = ref(false)
 
 const isAbort = ref(false)
@@ -37,7 +37,7 @@ const emit = defineEmits([
 const refWrapperContent = ref<HTMLElement>()
 
 let typingAnimationFrame: number | null = null
-
+// 把 displayText 转 HTML
 const renderedMarkdown = computed(() => {
   return renderMarkdownText(displayText.value)
 })
@@ -69,7 +69,7 @@ const WaitTextRender = defineComponent({
     )
   }
 })
-
+// 取消流读取，通知父组件清空 reader
 const abortReader = () => {
   if (props.reader) {
     props.reader.cancel()
@@ -81,7 +81,7 @@ const abortReader = () => {
   initializeEnd()
   isCompleted.value = true
 }
-
+// 重置全部状态，清空内容
 const resetStatus = () => {
   isAbort.value = false
   isCompleted.value = false
@@ -106,7 +106,7 @@ function hasActualContent(html) {
   const text = html.replace(/<[^>]*>/g, '')
   return /\S/.test(text)
 }
-
+// 完成后显示复制按钮
 const showCopy = computed(() => {
   if (!isCompleted.value) return false
 
@@ -123,7 +123,7 @@ const renderedContent = computed(() => {
 
 
 const initialized = ref(false)
-
+// 控制初始化加载态
 const initializeStart = () => {
   initialized.value = true
 }
@@ -136,6 +136,7 @@ const initializeEnd = () => {
  * reader 读取是否结束
  */
 const readIsOver = ref(false)
+// 循环 reader.read() 拉 chunk
 const readTextStream = async () => {
   if (!props.reader) return
 
@@ -161,7 +162,7 @@ const readTextStream = async () => {
         readIsOver.value = true
         break
       }
-
+      // 每个 chunk 用当前模型的 transformStreamFn 解析
       const transformer = props.transformStreamFn as CrossTransformFunction
       if (!transformer) {
         break
@@ -176,6 +177,7 @@ const readTextStream = async () => {
       if (stream.isWaitQueuing) {
         waitingForQueue.value = stream.isWaitQueuing
       }
+      // content 先放进 textBuffer，再由 showText() 每帧取 10 字追加到 displayText
       if (stream.content) {
         waitingForQueue.value = false
         textBuffer.value += stream.content
@@ -194,7 +196,7 @@ const readTextStream = async () => {
     }
   }
 }
-
+// 靠近底部时自动滚到底
 const scrollToBottom = async () => {
   await nextTick()
   if (!refWrapperContent.value) return
@@ -217,8 +219,8 @@ const scrollToBottomIfAtBottom = async () => {
 }
 
 /**
- * 读取 buffer 内容，逐字追加到 displayText
- */
+ * 读取 buffer 内容，逐字追加到 displayText  增量展示
+ */ 
 const runReadBuffer = (readCallback = () => {}, endCallback = () => {}) => {
   if (textBuffer.value.length > 0) {
     const nextChunk = textBuffer.value.substring(0, 10)
@@ -271,7 +273,7 @@ const showText = () => {
   }
   scrollToBottomIfAtBottom()
 }
-
+// 监听渲染内容
 watch(
   () => props.reader,
   () => {
@@ -296,7 +298,7 @@ defineExpose({
   initializeStart,
   initializeEnd
 })
-
+// 上层 n-spin 是否显示
 const showLoading = computed(() => {
   if (initialized.value) {
     return true
@@ -317,6 +319,7 @@ const showLoading = computed(() => {
 })
 
 const refClipBoard = ref()
+// 完成后显示复制按钮
 const handlePassClip = () => {
   if (refClipBoard.value) {
     refClipBoard.value.copyText()
@@ -416,6 +419,7 @@ const emptyPlaceholder = computed(() => {
             class="w-full h-full overflow-y-auto"
             p-24px
           >
+          <!-- 渲染区域 -->
             <div
               class="markdown-wrapper"
               v-html="renderedContent"
